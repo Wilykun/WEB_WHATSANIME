@@ -3224,3 +3224,130 @@ footer {
 @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
 }
+
+/* ============================================================
+   v1.7 MUSIC POLISH — ringan di HP + tampil lebih hidup
+   ============================================================ */
+
+/* --- Now playing: bingkai gradien + glow --- */
+.mpc-now-playing {
+    position: relative;
+    background: linear-gradient(135deg, rgba(99,102,241,0.14), rgba(139,92,246,0.10) 55%, rgba(236,72,153,0.10));
+    border: 1px solid transparent;
+    background-clip: padding-box;
+    box-shadow: 0 6px 22px rgba(99,102,241,0.18), inset 0 1px 0 rgba(255,255,255,0.06);
+    overflow: hidden;
+}
+.mpc-now-playing::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 14px;
+    padding: 1px;
+    background: linear-gradient(135deg, rgba(129,140,248,0.55), rgba(139,92,246,0.25) 40%, rgba(236,72,153,0.35));
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
+}
+
+/* --- Equalizer bars animasi saat lagu jalan --- */
+.mpc-eq {
+    display: none;
+    align-items: flex-end;
+    gap: 3px;
+    height: 22px;
+    margin-left: 2px;
+}
+.mpc-cover.playing ~ .mpc-info .mpc-eq { display: inline-flex; }
+.mpc-eq span {
+    width: 3px;
+    border-radius: 2px;
+    background: linear-gradient(to top, #6366f1, #e879f9);
+    animation: mpcEq 0.9s ease-in-out infinite;
+}
+.mpc-eq span:nth-child(1) { height: 60%; animation-delay: 0s; }
+.mpc-eq span:nth-child(2) { height: 100%; animation-delay: 0.15s; }
+.mpc-eq span:nth-child(3) { height: 45%; animation-delay: 0.3s; }
+.mpc-eq span:nth-child(4) { height: 80%; animation-delay: 0.45s; }
+@keyframes mpcEq {
+    0%, 100% { transform: scaleY(0.4); }
+    50% { transform: scaleY(1); }
+}
+
+/* --- Progress bar: fill gradien mengikuti posisi --- */
+.mpc-progress {
+    --p: 0%;
+    background: linear-gradient(to right, #818cf8 0%, #e879f9 var(--p), rgba(255,255,255,0.1) var(--p));
+    height: 5px;
+}
+.mpc-progress::-webkit-slider-thumb {
+    width: 15px;
+    height: 15px;
+    background: #fff;
+    border: 3px solid #818cf8;
+    box-shadow: 0 0 10px rgba(129,140,248,0.7);
+    transition: transform 0.15s;
+}
+.mpc-progress::-webkit-slider-thumb:hover { transform: scale(1.2); }
+.mpc-progress::-moz-range-thumb {
+    width: 12px; height: 12px; border-radius: 50%;
+    background: #fff; border: 3px solid #818cf8;
+    box-shadow: 0 0 10px rgba(129,140,248,0.7);
+}
+
+/* --- Tombol play: glow + efek tekan --- */
+.mpc-play-btn {
+    box-shadow: 0 6px 20px rgba(99,102,241,0.5), inset 0 1px 0 rgba(255,255,255,0.25);
+}
+.mpc-play-btn:active { transform: scale(0.92); }
+.mpc-btn { transition: transform 0.15s, background 0.2s, border-color 0.2s; }
+.mpc-btn:active { transform: scale(0.9); }
+
+/* --- Daftar lagu: item aktif lebih menonjol --- */
+.mpc-song-item {
+    content-visibility: auto;
+    contain-intrinsic-size: auto 44px;
+    border-left: 2px solid transparent;
+}
+.mpc-song-item:hover { background: rgba(99,102,241,0.12); }
+.mpc-song-item.active {
+    background: linear-gradient(90deg, rgba(99,102,241,0.22), rgba(139,92,246,0.08));
+    border-left-color: #818cf8;
+}
+.mpc-song-item.active .mpc-song-name { color: #fff; font-weight: 600; }
+
+/* --- Volume slider: fill gradien --- */
+.mpc-volume {
+    --p: 80%;
+    background: linear-gradient(to right, #8b5cf6 var(--p), rgba(255,255,255,0.15) var(--p));
+}
+.mpc-volume::-webkit-slider-thumb {
+    box-shadow: 0 0 8px rgba(139,92,246,0.8);
+}
+
+/* --- Tab anime: sedikit nyawa --- */
+.music-tab.tab-modern { transition: transform 0.15s, background 0.2s, border-color 0.2s; }
+.music-tab.tab-modern:hover { transform: translateY(-1px); }
+.music-tab.tab-modern.active {
+    background: linear-gradient(135deg, rgba(99,102,241,0.35), rgba(139,92,246,0.25));
+    border-color: rgba(129,140,248,0.6);
+    box-shadow: 0 4px 14px rgba(99,102,241,0.3);
+}
+
+/* ============================================================
+   PERF MOBILE: matikan animasi & blur paling berat di HP
+   ============================================================ */
+@media (max-width: 640px) {
+    /* Orbs: gradien statis, tanpa animasi repaint tiap frame */
+    body::after { animation: none; }
+    /* Judul: gradien statis */
+    .site-title { animation: none; }
+    /* Equalizer: lebih sedikit bar = lebih ringan */
+    .mpc-eq span:nth-child(4) { display: none; }
+    /* Blur: turunkan radius pada kartu berat */
+    .glass-card, .result-card, .music-modal-content {
+        backdrop-filter: blur(6px);
+        -webkit-backdrop-filter: blur(6px);
+    }
+}

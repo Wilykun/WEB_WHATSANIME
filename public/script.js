@@ -1239,6 +1239,7 @@ function mpcSetSong(index) {
     mpcArtist.textContent = song.artist || '—';    mpcEpisodes.textContent = song.episodes ? `Ep. ${song.episodes}` : '';
     mpcCover.innerHTML = song.type === 'OP' ? SVG_COVER_OP : song.type === 'ED' ? SVG_COVER_ED : SVG_COVER_DEF;
     mpcProgress.value = 0;
+    mpcProgress.style.setProperty('--p', '0%');
     mpcCurrent.textContent = '0:00';
     mpcDuration.textContent = '0:00';
     document.querySelectorAll('.mpc-song-item').forEach((el, i) => {
@@ -1354,6 +1355,7 @@ musicAudio.addEventListener('timeupdate', () => {
     if (!isNaN(musicAudio.duration) && musicAudio.duration > 0) {
         const pct = (musicAudio.currentTime / musicAudio.duration) * 100;
         mpcProgress.value = pct;
+        mpcProgress.style.setProperty('--p', pct + '%');
         mpcCurrent.textContent = mpcFmtTime(musicAudio.currentTime);
         mpcDuration.textContent = mpcFmtTime(musicAudio.duration);
     }
@@ -1363,11 +1365,17 @@ mpcProgress.addEventListener('input', () => {
     if (!isNaN(musicAudio.duration)) {
         musicAudio.currentTime = (mpcProgress.value / 100) * musicAudio.duration;
     }
+    mpcProgress.style.setProperty('--p', mpcProgress.value + '%');
 });
+
+function mpcSyncVolFill() {
+    mpcVolume.style.setProperty('--p', (musicAudio.volume * 100) + '%');
+}
 
 mpcVolume.addEventListener('input', () => {
     musicAudio.volume = parseFloat(mpcVolume.value);
     mpcSetVolIcon(musicAudio.volume);
+    mpcSyncVolFill();
 });
 
 mpcVolIcon.addEventListener('click', () => {
@@ -1381,6 +1389,7 @@ mpcVolIcon.addEventListener('click', () => {
         mpcVolume.value = musicAudio.volume;
         mpcSetVolIcon(musicAudio.volume);
     }
+    mpcSyncVolFill();
 });
 
 musicAudio.addEventListener('ended', () => {
@@ -1424,6 +1433,7 @@ function toggleSongList() {
 }
 
 musicAudio.volume = 0.8;
+mpcSyncVolFill();
 
 window.loadAnimeMusic = loadAnimeMusic;
 window.loadAnimeMix = loadAnimeMix;
