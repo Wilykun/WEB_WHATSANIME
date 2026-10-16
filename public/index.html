@@ -1,0 +1,868 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WhatAnime - Trace.moe Scraper</title>
+    <link rel="icon" type="image/png" href="favicon.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="menu-container">
+                <button class="menu-btn" id="menuBtn">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <circle cx="12" cy="6" r="1.5" fill="currentColor"/>
+                        <circle cx="12" cy="12" r="1.5" fill="currentColor"/>
+                        <circle cx="12" cy="18" r="1.5" fill="currentColor"/>
+                    </svg>
+                </button>
+                <div class="menu-dropdown" id="menuDropdown">
+                    <button class="menu-item" id="openMusicPlayer">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3" />
+                        </svg>
+                        <span>Musik Anime OST/ED</span>
+                    </button>
+                    <button class="menu-item" id="openUpdateLog">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                        </svg>
+                        <span>Update Web</span>
+                    </button>
+                    <button class="menu-item" id="openServerInfo">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14M5 12a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v4a2 2 0 01-2 2M5 12a2 2 0 00-2 2v4a2 2 0 002 2h14a2 2 0 002-2v-4a2 2 0 00-2-2m-2-4h.01M17 16h.01" />
+                        </svg>
+                        <span>Info Server</span>
+                    </button>
+                    <button class="menu-item" id="openDeveloper">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
+                        </svg>
+                        <span>Developer</span>
+                    </button>
+                </div>
+            </div>
+            <h1 class="site-title">WhatAnime <span class="title-accent">Finder</span></h1>
+            <span class="version-badge">v1.6</span>
+            <p class="subtitle">Website ini dibuat untuk membantu Anda menemukan anime dari screenshot/Gambar tapi harus jelas ya gambarnya dengan mudah dan cepat.</p>
+        </header>
+
+        <main>
+            <div class="upload-section">
+                <div class="input-method-tabs">
+                    <button class="tab-btn active" data-tab="upload">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                        </svg>
+                        Upload Gambar
+                    </button>
+                    <button class="tab-btn" data-tab="url">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
+                        </svg>
+                        URL Gambar
+                    </button>
+                </div>
+
+                <div class="tab-content active" id="uploadContent">
+                    <div class="upload-box" id="uploadBox">
+                        <svg class="upload-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                        </svg>
+                        <p class="upload-text">Klik atau drag gambar di sini</p>
+                        <p class="upload-hint">Mendukung: JPG, PNG, GIF, WebP, BMP, SVG</p>
+                        <input type="file" id="fileInput" accept="image/*" hidden>
+                    </div>
+                </div>
+                
+                <div class="tab-content" id="urlContent" style="display: none;">
+                    <div class="url-input-container">
+                        <input type="text" id="urlInput" class="url-input" placeholder="Masukkan URL gambar (https://...)" />
+                        <button class="url-load-btn" id="urlLoadBtn">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                            </svg>
+                            Muat Gambar
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="preview-box" id="previewBox" style="display: none;">
+                    <img id="previewImage" src="" alt="Preview">
+                    <button class="btn-remove" id="btnRemove">✕ Hapus</button>
+                </div>
+
+                <button class="btn-search" id="btnSearch" disabled>
+                    <span id="searchText">🔍 Cari Anime</span>
+                    <span id="loadingText" style="display: none;">⏳ Mencari...</span>
+                </button>
+                
+                <div class="loading-container" id="loadingContainer" style="display: none;">
+                    <div class="loading-bar-wrapper">
+                        <div class="loading-bar" id="loadingBar"></div>
+                    </div>
+                    <div class="loading-percentage" id="loadingPercentage">0%</div>
+                </div>
+            </div>
+
+            <div class="results-section" id="resultsSection" style="display: none;">
+                <h2>📋 Hasil Pencarian</h2>
+                <div id="resultsContainer"></div>
+            </div>
+        </main>
+
+        <footer>
+            <div class="footer-content">
+                <p id="datetime"></p>
+                <div class="footer-stats">
+                    <div class="footer-stat-item">
+                        <span class="footer-stat-dot online-dot"></span>
+                        <span id="onlineCount">-</span> online sekarang
+                    </div>
+                    <span class="footer-stat-sep">•</span>
+                    <div class="footer-stat-item">
+                        <span class="footer-stat-icon">👁️</span>
+                        <span id="totalVisits">-</span> total kunjungan
+                    </div>
+                </div>
+                <p class="footer-text">Made with ❤️ by <a href="https://wa.me/6289688206739?text=Halo%20Bang%20Wily,%20saya%20tertarik%20dengan%20WhatAnime%20Finder" target="_blank" style="color: var(--primary-color); text-decoration: none; font-weight: 600;">Bang Wily</a></p>
+            </div>
+        </footer>
+        
+        <button class="scroll-to-top" id="scrollToTop" title="Kembali ke atas">
+            ▲
+        </button>
+    </div>
+
+    <div class="modal" id="updateModal">
+        <div class="modal-content">
+            <button class="modal-close" id="updateModalClose">✕</button>
+            <div class="modal-header">
+                <h2>📋 Update Web</h2>
+            </div>
+            <div class="modal-body">
+                <p class="update-intro">Riwayat pembaruan WhatAnime Finder — semua fitur baru & perbaikan.</p>
+
+                <!-- v1.6 TERBARU -->
+                <div class="update-entry">
+                    <div class="update-entry-header" onclick="toggleUpdateEntry('update-v16', this)">
+                        <div class="update-entry-title">
+                            <span class="update-version new-badge">v1.6</span>
+                            <span class="update-title-text">✨ UI Glow-Up &amp; Perbaikan Bug</span>
+                        </div>
+                        <div class="update-entry-meta">
+                            <span class="update-date" id="update-v16-time">–</span>
+                            <span class="update-chevron">▼</span>
+                        </div>
+                    </div>
+                    <div class="update-entry-body" id="update-v16" style="display: none;">
+                        <ul class="update-list">
+                            <li>✨ <strong>Desain baru</strong> — font Plus Jakarta Sans, judul gradient, badge versi, tombol dengan efek kilau</li>
+                            <li>🎨 Upload box, kartu hasil, music player & modal tampil lebih modern dengan glassmorphism</li>
+                            <li>🐛 Perbaikan <strong>ikon spoiler yang hilang</strong> setelah buka/tutup info anime</li>
+                            <li>📊 Counter <strong>total request</strong> kini menghitung semua request (sebelumnya tidak)</li>
+                            <li>👁️ Counter <strong>kunjungan</strong> tidak lagi menggelembung tiap reconnect</li>
+                            <li>🔒 Proxy gambar kini ada <strong>batas 15 MB, timeout, & proteksi SSRF</strong></li>
+                            <li>🛡️ Teks dari API luar di-escape — cegah HTML/XSS rusak</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- v1.5 -->
+                <div class="update-entry">
+                    <div class="update-entry-header" onclick="toggleUpdateEntry('update-v15', this)">
+                        <div class="update-entry-title">
+                            <span class="update-version new-badge">v1.5</span>
+                            <span class="update-title-text">🎵 40+ Anime &amp; Grup Spoiler Musik</span>
+                        </div>
+                        <div class="update-entry-meta">
+                            <span class="update-date" id="update-v15-time">–</span>
+                            <span class="update-chevron">▼</span>
+                        </div>
+                    </div>
+                    <div class="update-entry-body" id="update-v15" style="display: none;">
+                        <ul class="update-list">
+                            <li>🎌 Tambah <strong>20+ anime baru</strong> yang dicek secara realtime via AnimeThemes API</li>
+                            <li>🔥 Grup baru <strong>Terbaru 2024–2026</strong> — Solo Leveling, Dandadan, Kaiju No. 8, Frieren, Mushoku Tensei, Mashle</li>
+                            <li>⚡ Tambah anime populer: One Punch Man, Spy x Family, Blue Lock, Bocchi the Rock, Dr. Stone, Apothecary Diaries, KonoSuba, Overlord, TenSura, Railgun</li>
+                            <li>📂 Setiap grup musik kini bisa <strong>dibuka/ditutup (spoiler accordion)</strong> agar tampilan lebih rapi</li>
+                            <li>🔧 Perbaikan bug slug <strong>Black Clover</strong> yang sebelumnya tidak bisa diputar</li>
+                            <li>🎲 Mix Semua Anime kini mencakup <strong>38+ anime</strong> dari sebelumnya 22</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- v1.4 -->
+                <div class="update-entry">
+                    <div class="update-entry-header" onclick="toggleUpdateEntry('update-v14', this)">
+                        <div class="update-entry-title">
+                            <span class="update-version">v1.4</span>
+                            <span class="update-title-text">🎵 Musik Anime OST/ED Player</span>
+                        </div>
+                        <div class="update-entry-meta">
+                            <span class="update-date" id="update-v14-time">–</span>
+                            <span class="update-chevron">▼</span>
+                        </div>
+                    </div>
+                    <div class="update-entry-body" id="update-v14" style="display: none;">
+                        <ul class="update-list">
+                            <li>🎵 Fitur baru <strong>Musik Anime OST/ED</strong> di menu titik 3</li>
+                            <li>🎧 Custom <strong>HTML5 audio player</strong> buatan sendiri — tanpa iframe pihak ketiga</li>
+                            <li>▶ Kontrol lengkap: <strong>Play/Pause, Prev, Next, Progress bar, Volume slider</strong></li>
+                            <li>🔊 <strong>Volume control</strong> selalu terlihat — klik ikon untuk mute/unmute</li>
+                            <li>📋 <strong>40+ tab anime populer</strong> — Naruto, One Piece, Bleach, Demon Slayer, AoT, JJK, Chainsaw Man, Solo Leveling, Frieren, Dandadan, Kaiju No. 8, Mushoku Tensei, Mashle, Spy x Family, Blue Lock, Bocchi the Rock, dan masih banyak lagi!</li>
+                            <li>🎲 Tab <strong>Mix Semua</strong> — putar campuran lagu dari semua anime secara acak</li>
+                            <li>⏭ <strong>Auto-next</strong> — otomatis lanjut ke lagu berikutnya setelah selesai</li>
+                            <li>💿 Cover emoji berputar animasi saat lagu berjalan</li>
+                            <li>🌐 Powered by <strong>AnimeThemes API</strong> — full song, gratis, tanpa login</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- v1.3 -->
+                <div class="update-entry">
+                    <div class="update-entry-header" onclick="toggleUpdateEntry('update-v13', this)">
+                        <div class="update-entry-title">
+                            <span class="update-version">v1.3</span>
+                            <span class="update-title-text">Perbaikan & Update Web Log</span>
+                        </div>
+                        <div class="update-entry-meta">
+                            <span class="update-date">23 Mar 2026</span>
+                            <span class="update-chevron">▼</span>
+                        </div>
+                    </div>
+                    <div class="update-entry-body" id="update-v13" style="display: none;">
+                        <ul class="update-list">
+                            <li>🔧 Perbaikan <strong>scroll berat di modal</strong> — scroll sekarang lancar via overlay, bukan card</li>
+                            <li>🔒 <strong>Body scroll lock</strong> — halaman di belakang tidak ikut scroll saat modal terbuka</li>
+                            <li>📋 Penambahan menu <strong>Update Web</strong> di titik 3 pojok kiri atas</li>
+                            <li>📝 Riwayat update per versi dengan <strong>spoiler accordion</strong> yang rapih</li>
+                            <li>🕐 Timestamp <strong>real-time</strong> otomatis di setiap entri update terbaru</li>
+                            <li>🔙 Tombol <strong>Kembali ke Halaman</strong> di Update Web juga unlock scroll dengan benar</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- v1.2 -->
+                <div class="update-entry">
+                    <div class="update-entry-header" onclick="toggleUpdateEntry('update-v12', this)">
+                        <div class="update-entry-title">
+                            <span class="update-version">v1.2</span>
+                            <span class="update-title-text">Spoiler & Terjemahan Indonesia</span>
+                        </div>
+                        <div class="update-entry-meta">
+                            <span class="update-date">22 Mar 2026</span>
+                            <span class="update-chevron">▼</span>
+                        </div>
+                    </div>
+                    <div class="update-entry-body" id="update-v12" style="display: none;">
+                        <ul class="update-list">
+                            <li>✨ Spoiler button di bagian <strong>Developer Info</strong> (Skills, Achievements, dll.)</li>
+                            <li>🇮🇩 Spoiler button untuk <strong>Nonton & Download Anime Sub Indo</strong> — tampil inline, warna merah-putih</li>
+                            <li>🔙 Tombol <strong>Kembali ke Halaman</strong> di modal Developer Info & Info Server</li>
+                            <li>📖 Spoiler button terpisah untuk <strong>Sinopsis</strong>, <strong>Judul Alternatif</strong>, dan <strong>Link Eksternal</strong></li>
+                            <li>🎛️ <strong>Accordion behavior</strong> — buka satu spoiler, yang lain otomatis tutup (dalam 1 card dan antar card)</li>
+                            <li>🌐 <strong>Terjemahan Indonesia otomatis</strong> di bagian Sinopsis menggunakan API terjemahan</li>
+                            <li>📋 Halaman <strong>Update Web</strong> ini — riwayat fitur dengan spoiler per versi</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- v1.1 -->
+                <div class="update-entry">
+                    <div class="update-entry-header" onclick="toggleUpdateEntry('update-v11', this)">
+                        <div class="update-entry-title">
+                            <span class="update-version">v1.1</span>
+                            <span class="update-title-text">Peningkatan UI & Fitur</span>
+                        </div>
+                        <div class="update-entry-meta">
+                            <span class="update-date">15 Feb 2026</span>
+                            <span class="update-chevron">▼</span>
+                        </div>
+                    </div>
+                    <div class="update-entry-body" id="update-v11" style="display: none;">
+                        <ul class="update-list">
+                            <li>🎴 Tampilan kartu hasil pencarian yang lebih rapi</li>
+                            <li>📊 Halaman <strong>Info Server</strong> — RAM, CPU, Uptime, Tech Stack</li>
+                            <li>👨‍💻 Modal <strong>Developer Info</strong> — profil, skills, achievements, streak</li>
+                            <li>⌚ Jam & tanggal real-time di footer</li>
+                            <li>👁️ Counter online & total kunjungan via SSE</li>
+                            <li>🔝 Tombol scroll-to-top otomatis muncul</li>
+                            <li>🖼️ Background animasi langit malam kota yang berubah</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- v1.0 -->
+                <div class="update-entry">
+                    <div class="update-entry-header" onclick="toggleUpdateEntry('update-v10', this)">
+                        <div class="update-entry-title">
+                            <span class="update-version">v1.0</span>
+                            <span class="update-title-text">Rilis Pertama</span>
+                        </div>
+                        <div class="update-entry-meta">
+                            <span class="update-date">01 Jan 2026</span>
+                            <span class="update-chevron">▼</span>
+                        </div>
+                    </div>
+                    <div class="update-entry-body" id="update-v10" style="display: none;">
+                        <ul class="update-list">
+                            <li>🚀 Rilis awal WhatAnime Finder</li>
+                            <li>📤 Upload gambar dari perangkat</li>
+                            <li>🔗 Input via URL gambar</li>
+                            <li>🔍 Pencarian anime menggunakan <strong>Trace.moe API</strong></li>
+                            <li>📡 Data anime lengkap dari <strong>AniList API</strong> (judul, episode, status, studio, genre)</li>
+                            <li>🇮🇩 Daftar situs streaming & download Sub Indo (Samehadaku, Otakudesu, dll.)</li>
+                            <li>🌙 Tampilan dark mode dengan tema anime</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <button class="back-to-page-btn" onclick="document.getElementById('updateModal').classList.remove('show'); document.body.style.overflow='';">
+                    ← Kembali ke Halaman
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="devModal">
+        <div class="modal-content">
+            <button class="modal-close" id="devModalClose">✕</button>
+            <div class="modal-header">
+                <h2>👨‍💻 Developer Info</h2>
+            </div>
+            <div class="modal-body">
+                <div class="dev-avatar">
+                    <img src="dev-avatar.png" alt="Developer Avatar" class="avatar-image">
+                </div>
+                <h3 class="dev-name">Bang Wily</h3>
+                <p class="dev-role">Full Stack Developer</p>
+                <div class="coding-text-container">
+                    <span class="coding-prefix">💬 </span>
+                    <span class="typing-text" id="typingText"></span>
+                </div>
+                <div class="dev-description">
+                    <p>Terima kasih telah menggunakan WhatAnime Finder!</p>
+                    <p>Website ini dibuat untuk membantu Anda menemukan anime dari screenshot/Gambar tapi harus jelas ya gambarnya dengan mudah dan cepat.</p>
+                </div>
+
+                <button class="spoiler-btn dev-spoiler-btn" onclick="toggleDevSpoiler()" id="devSpoilerBtn">
+                    <span class="spoiler-icon" id="devSpoilerIcon">▼</span><span class="spoiler-label"> Lihat Info Lebih Lanjut</span>
+                </button>
+
+                <div id="devSpoilerContent" style="display: none;">
+                
+                <div class="skills-section">
+                    <h4 class="skills-title">🛠️ Skills</h4>
+                    <div class="skill-item">
+                        <div class="skill-header">
+                            <span class="skill-name">Node.js</span>
+                            <span class="skill-percent">90%</span>
+                        </div>
+                        <div class="skill-bar">
+                            <div class="skill-progress" style="width: 90%;"></div>
+                        </div>
+                    </div>
+                    <div class="skill-item">
+                        <div class="skill-header">
+                            <span class="skill-name">JavaScript</span>
+                            <span class="skill-percent">85%</span>
+                        </div>
+                        <div class="skill-bar">
+                            <div class="skill-progress" style="width: 85%;"></div>
+                        </div>
+                    </div>
+                    <div class="skill-item">
+                        <div class="skill-header">
+                            <span class="skill-name">Express.js</span>
+                            <span class="skill-percent">88%</span>
+                        </div>
+                        <div class="skill-bar">
+                            <div class="skill-progress" style="width: 88%;"></div>
+                        </div>
+                    </div>
+                    <div class="skill-item">
+                        <div class="skill-header">
+                            <span class="skill-name">HTML & CSS</span>
+                            <span class="skill-percent">92%</span>
+                        </div>
+                        <div class="skill-bar">
+                            <div class="skill-progress" style="width: 92%;"></div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="achievements-section">
+                    <h4 class="achievements-title">🏆 Achievements</h4>
+                    <div class="badges-container">
+                        <div class="badge-item" title="Code Master">
+                            <span class="badge-emoji">💻</span>
+                            <span class="badge-name">Code Master</span>
+                        </div>
+                        <div class="badge-item" title="Bug Hunter">
+                            <span class="badge-emoji">🐛</span>
+                            <span class="badge-name">Bug Hunter</span>
+                        </div>
+                        <div class="badge-item" title="Coffee Lover">
+                            <span class="badge-emoji">☕</span>
+                            <span class="badge-name">Coffee Lover</span>
+                        </div>
+                        <div class="badge-item" title="Night Coder">
+                            <span class="badge-emoji">🌙</span>
+                            <span class="badge-name">Night Owl</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="streak-section">
+                    <div class="streak-card">
+                        <div class="streak-icon">🔥</div>
+                        <div class="streak-info">
+                            <div class="streak-number">365</div>
+                            <div class="streak-label">Days Coding Streak</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="dev-stats">
+                    <div class="stat-item">
+                        <div class="stat-value">2025</div>
+                        <div class="stat-label">Year</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value">v1.0</div>
+                        <div class="stat-label">Version</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value">100%</div>
+                        <div class="stat-label">Free</div>
+                    </div>
+                </div>
+                <div class="contact-section">
+                    <p class="contact-label">🐛 Bila ada error / bug, hubungi:</p>
+                    <div class="contact-buttons">
+                        <a href="https://wa.me/6289688206739?text=Halo%20kak%2C%20saya%20mau%20laporan%20bug%2Ferror%20yang%20ada%20di%20WhatAnime%20Finder%20%F0%9F%90%9B%0A%0ABug%20yang%20ditemukan%3A%0A" target="_blank" class="whatsapp-btn">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/>
+                            </svg>
+                            WhatsApp
+                        </a>
+                        <a href="https://m.me/wily.kun.1" target="_blank" class="facebook-btn">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+                            </svg>
+                            Facebook
+                        </a>
+                    </div>
+                </div>
+
+                <button class="back-to-page-btn" onclick="document.getElementById('devModal').classList.remove('show'); document.body.style.overflow='';">
+                    ← Kembali ke Halaman
+                </button>
+
+                </div><!-- end devSpoilerContent -->
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="serverModal">
+        <div class="modal-content">
+            <button class="modal-close" id="serverModalClose">✕</button>
+            <div class="modal-header">
+                <h2>🖥️ Info Server</h2>
+            </div>
+            <div class="modal-body">
+                <div class="server-info-grid">
+                    <div class="info-card">
+                        <div class="info-icon">💾</div>
+                        <div class="info-details">
+                            <div class="info-title">RAM Usage</div>
+                            <div class="info-value" id="ramUsage">Loading...</div>
+                            <div class="info-bar">
+                                <div class="info-bar-fill" id="ramBar"></div>
+                            </div>
+                            <div class="info-subtitle" id="ramTotal">-</div>
+                        </div>
+                    </div>
+
+                    <div class="info-card">
+                        <div class="info-icon">⚡</div>
+                        <div class="info-details">
+                            <div class="info-title">CPU Load</div>
+                            <div class="info-value" id="cpuUsage">Loading...</div>
+                            <div class="info-bar">
+                                <div class="info-bar-fill cpu-bar" id="cpuBar"></div>
+                            </div>
+                            <div class="info-subtitle" id="cpuLoad5">Load 5m: -</div>
+                        </div>
+                    </div>
+
+                    <div class="info-card">
+                        <div class="info-icon">🧠</div>
+                        <div class="info-details">
+                            <div class="info-title">Heap Memory</div>
+                            <div class="info-value" id="heapUsage">Loading...</div>
+                            <div class="info-bar">
+                                <div class="info-bar-fill heap-bar" id="heapBar"></div>
+                            </div>
+                            <div class="info-subtitle" id="heapRss">RSS: -</div>
+                        </div>
+                    </div>
+
+                    <div class="info-card">
+                        <div class="info-icon">🖥️</div>
+                        <div class="info-details">
+                            <div class="info-title">CPU Cores</div>
+                            <div class="info-value" id="cpuCores">Loading...</div>
+                            <div class="info-subtitle" id="cpuArch">Arch: -</div>
+                        </div>
+                    </div>
+
+                    <div class="info-card">
+                        <div class="info-icon">⏱️</div>
+                        <div class="info-details">
+                            <div class="info-title">Uptime Server</div>
+                            <div class="info-value" id="uptime">Loading...</div>
+                        </div>
+                    </div>
+
+                    <div class="info-card">
+                        <div class="info-icon">📊</div>
+                        <div class="info-details">
+                            <div class="info-title">Total Request</div>
+                            <div class="info-value" id="totalRequests">Loading...</div>
+                        </div>
+                    </div>
+
+                    <div class="info-card">
+                        <div class="info-icon">🌐</div>
+                        <div class="info-details">
+                            <div class="info-title">Status Server</div>
+                            <div class="info-value server-status">
+                                <span class="status-dot online"></span> Online
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="info-card">
+                        <div class="info-icon">📍</div>
+                        <div class="info-details">
+                            <div class="info-title">Lokasi Server</div>
+                            <div class="info-value">Vercel Cloud</div>
+                            <div class="info-subtitle">Serverless 🌐</div>
+                        </div>
+                    </div>
+
+                    <div class="info-card full-width">
+                        <div class="info-icon">💻</div>
+                        <div class="info-details">
+                            <div class="info-title">Model CPU</div>
+                            <div class="info-value" id="cpuModel" style="font-size:0.8rem; word-break:break-all;">Loading...</div>
+                        </div>
+                    </div>
+
+                    <div class="info-card full-width">
+                        <div class="info-icon">🔧</div>
+                        <div class="info-details">
+                            <div class="info-title">Tech Stack</div>
+                            <div class="tech-badges">
+                                <span class="tech-badge">Node.js</span>
+                                <span class="tech-badge">Express</span>
+                                <span class="tech-badge">Vanilla JS</span>
+                                <span class="tech-badge">Trace.moe API</span>
+                                <span class="tech-badge">AniList API</span>
+                                <span class="tech-badge">SSE</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="info-card full-width">
+                        <div class="info-icon">⚙️</div>
+                        <div class="info-details">
+                            <div class="info-title">Detail Server</div>
+                            <div class="server-details">
+                                <div class="detail-row">
+                                    <span class="detail-label">Platform:</span>
+                                    <span class="detail-value" id="svrPlatform">-</span>
+                                </div>
+                                <div class="detail-row">
+                                    <span class="detail-label">Arsitektur:</span>
+                                    <span class="detail-value" id="svrArch">-</span>
+                                </div>
+                                <div class="detail-row">
+                                    <span class="detail-label">Runtime:</span>
+                                    <span class="detail-value" id="svrNode">-</span>
+                                </div>
+                                <div class="detail-row">
+                                    <span class="detail-label">Process ID:</span>
+                                    <span class="detail-value" id="svrPid">-</span>
+                                </div>
+                                <div class="detail-row">
+                                    <span class="detail-label">Status:</span>
+                                    <span class="detail-value status-online">✓ Healthy</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <button class="back-to-page-btn" onclick="document.getElementById('serverModal').classList.remove('show'); document.body.style.overflow='';">
+                    ← Kembali ke Halaman
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Music Player Modal -->
+    <div class="modal" id="musicModal">
+        <div class="modal-content music-modal-content">
+            <div class="modal-header music-modal-header">
+                <div class="music-header-left">
+                    <span class="music-icon-anim">🎵</span>
+                    <h2>Musik Anime OST/ED</h2>
+                </div>
+                <button class="modal-close" id="musicModalClose">✕</button>
+            </div>
+            <div class="modal-body music-modal-body">
+                <div class="music-intro-bar">
+                    <svg class="music-intro-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M12 3v10.55A4 4 0 1 0 14 17V7h4V3h-6z"/></svg>
+                    <span>Putar full OST / OP / ED anime populer &mdash; gratis, tanpa login, dengan volume control!</span>
+                </div>
+
+                <!-- Group: Classic & Legend -->
+                <div class="music-group collapsed">
+                    <button class="music-group-header" onclick="toggleMusicGroup(this)">
+                        <span>🏛️ Classic &amp; Legend</span>
+                        <svg class="music-group-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+                    </button>
+                    <div class="music-group-body" id="tabsClassic">
+                        <button class="music-tab active" data-anime="naruto" onclick="loadAnimeMusic('naruto', this)">
+                            <svg class="tab-svg" viewBox="0 0 24 24" fill="currentColor"><path d="M17 8C8 10 5.9 16.17 3.82 22c2.47-1.15 5.5-2.57 8.18-2L12 22c2-3 5-8 5-14z"/></svg>Naruto
+                        </button>
+                        <button class="music-tab" data-anime="narutoshippuuden" onclick="loadAnimeMusic('narutoshippuuden', this)">
+                            <svg class="tab-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7a5 5 0 0 1 0 10" stroke-linecap="round"/></svg>Shippuden
+                        </button>
+                        <button class="music-tab" data-anime="one_piece" onclick="loadAnimeMusic('one_piece', this)">
+                            <svg class="tab-svg" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="8" r="6"/><path d="M9 14v2l-3 1v2h12v-2l-3-1v-2"/><line x1="6" y1="21" x2="18" y2="21" stroke="currentColor" stroke-width="2"/></svg>One Piece
+                        </button>
+                        <button class="music-tab" data-anime="bleach" onclick="loadAnimeMusic('bleach', this)">
+                            <svg class="tab-svg" viewBox="0 0 24 24" fill="currentColor"><path d="M11 2h2v8h8v2h-8v8h-2v-8H3v-2h8z"/></svg>Bleach
+                        </button>
+                        <button class="music-tab" data-anime="dragon_ball_z" onclick="loadAnimeMusic('dragon_ball_z', this)">
+                            <svg class="tab-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3" fill="currentColor"/><path d="M12 3v3M12 18v3M3 12h3M18 12h3" stroke-linecap="round"/></svg>Dragon Ball Z
+                        </button>
+                        <button class="music-tab" data-anime="dragon_ball_super" onclick="loadAnimeMusic('dragon_ball_super', this)">
+                            <svg class="tab-svg" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2 5h5l-4 3 1.5 5L12 12l-4.5 3L9 10 5 7h5z"/></svg>DB Super
+                        </button>
+                        <button class="music-tab" data-anime="fairy_tail" onclick="loadAnimeMusic('fairy_tail', this)">
+                            <svg class="tab-svg" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4-6.2-4.5-6.2 4.5 2.4-7.4L2 9.4h7.6z"/></svg>Fairy Tail
+                        </button>
+                        <button class="music-tab" data-anime="hunter_x_hunter" onclick="loadAnimeMusic('hunter_x_hunter', this)">
+                            <svg class="tab-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4"/><circle cx="12" cy="12" r="1" fill="currentColor"/></svg>Hunter x Hunter
+                        </button>
+                        <button class="music-tab" data-anime="one_punch_man" onclick="loadAnimeMusic('one_punch_man', this)">
+                            <svg class="tab-svg" viewBox="0 0 24 24" fill="currentColor"><path d="M9 3l-1 4H4l3.5 2.5L6 14l5-3 5 3-1.5-4.5L18 7h-4L13 3z"/><circle cx="12" cy="17" r="3" fill="none" stroke="currentColor" stroke-width="2"/></svg>One Punch Man
+                        </button>
+                        <button class="music-tab" data-anime="toaru_kagaku_no_railgun" onclick="loadAnimeMusic('toaru_kagaku_no_railgun', this)">
+                            <svg class="tab-svg" viewBox="0 0 24 24" fill="currentColor"><path d="M13 2L3 14h9l-1 8 10-12h-9z"/></svg>Railgun
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Group: Modern & Trending -->
+                <div class="music-group collapsed">
+                    <button class="music-group-header" onclick="toggleMusicGroup(this)">
+                        <span>⚡ Modern &amp; Trending</span>
+                        <svg class="music-group-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+                    </button>
+                    <div class="music-group-body" id="tabsModern">
+                        <button class="music-tab tab-modern" data-anime="kimetsu_no_yaiba" onclick="loadAnimeMusic('kimetsu_no_yaiba', this)">
+                            <svg class="tab-svg" viewBox="0 0 24 24" fill="currentColor"><path d="M13.5 0.67s.74 2.65.74 4.8c0 2.06-1.35 3.73-3.41 3.73-2.07 0-3.63-1.67-3.63-3.73l.03-.36C5.21 7.51 4 10.62 4 14c0 4.42 3.58 8 8 8s8-3.58 8-8c0-5.39-2.59-10.2-6.5-13.33z"/></svg>Demon Slayer
+                        </button>
+                        <button class="music-tab tab-modern" data-anime="shingeki_no_kyojin" onclick="loadAnimeMusic('shingeki_no_kyojin', this)">
+                            <svg class="tab-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M5.64 5.64l2.12 2.12M16.24 16.24l2.12 2.12M5.64 18.36l2.12-2.12M16.24 7.76l2.12-2.12"/></svg>Attack on Titan
+                        </button>
+                        <button class="music-tab tab-modern" data-anime="jujutsu_kaisen" onclick="loadAnimeMusic('jujutsu_kaisen', this)">
+                            <svg class="tab-svg" viewBox="0 0 24 24" fill="currentColor"><ellipse cx="12" cy="12" rx="9" ry="6"/><ellipse cx="12" cy="12" rx="4" ry="2.5" fill="none" stroke="currentColor" stroke-width="1.5"/><circle cx="12" cy="12" r="1.5" fill="var(--bg-start,#1a1a2e)"/></svg>Jujutsu Kaisen
+                        </button>
+                        <button class="music-tab tab-modern" data-anime="boku_no_hero_academia" onclick="loadAnimeMusic('boku_no_hero_academia', this)">
+                            <svg class="tab-svg" viewBox="0 0 24 24" fill="currentColor"><path d="M7 2l1.5 4H5L12 22l7-16h-3.5L17 2z"/></svg>My Hero Academia
+                        </button>
+                        <button class="music-tab tab-modern" data-anime="chainsaw_man" onclick="loadAnimeMusic('chainsaw_man', this)">
+                            <svg class="tab-svg" viewBox="0 0 24 24" fill="currentColor"><rect x="3" y="10" width="14" height="4" rx="1"/><rect x="17" y="9" width="4" height="6" rx="1"/><rect x="4" y="7" width="2" height="2" rx="0.5"/><rect x="7" y="7" width="2" height="2" rx="0.5"/><rect x="10" y="7" width="2" height="2" rx="0.5"/><rect x="4" y="15" width="2" height="2" rx="0.5"/><rect x="7" y="15" width="2" height="2" rx="0.5"/><rect x="10" y="15" width="2" height="2" rx="0.5"/></svg>Chainsaw Man
+                        </button>
+                        <button class="music-tab tab-modern" data-anime="black_clover_tv" onclick="loadAnimeMusic('black_clover_tv', this)">
+                            <svg class="tab-svg" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2c0 0-4 3.5-4 7a4 4 0 0 0 8 0c0-3.5-4-7-4-7z"/><path d="M5 9c0 0-3 3.5-3 7a4 4 0 0 0 8 0c0-3.5-3-7-3-7z"/><path d="M19 9c0 0-3 3.5-3 7a4 4 0 0 0 8 0c0-3.5-3-7-3-7z"/></svg>Black Clover
+                        </button>
+                        <button class="music-tab tab-modern" data-anime="vinland_saga" onclick="loadAnimeMusic('vinland_saga', this)">
+                            <svg class="tab-svg" viewBox="0 0 24 24" fill="currentColor"><path d="M7 3l2 7H4l7 11 7-11h-5l2-7z"/></svg>Vinland Saga
+                        </button>
+                        <button class="music-tab tab-modern" data-anime="spy_x_family" onclick="loadAnimeMusic('spy_x_family', this)">
+                            <svg class="tab-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="7" r="3"/><circle cx="16" cy="9" r="2"/><path d="M3 20c0-4 3-6 6-6h2c3 0 6 2 6 6" stroke-linecap="round"/><path d="M16 16c2-1 4 0 4 3" stroke-linecap="round"/></svg>Spy x Family
+                        </button>
+                        <button class="music-tab tab-modern" data-anime="blue_lock" onclick="loadAnimeMusic('blue_lock', this)">
+                            <svg class="tab-svg" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="8" fill="none" stroke="currentColor" stroke-width="2"/><path d="M8 12l3 3 5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none"/></svg>Blue Lock
+                        </button>
+                        <button class="music-tab tab-modern" data-anime="bocchi_the_rock" onclick="loadAnimeMusic('bocchi_the_rock', this)">
+                            <svg class="tab-svg" viewBox="0 0 24 24" fill="currentColor"><path d="M9 3c-1 0-2 .5-2 2v1H5v2h2v9c0 1.5 1 3 3 3h4c2 0 3-1.5 3-3V8h2V6h-2V5c0-1.5-1-2-2-2H9zm0 2h6v1H9V5zm0 3h6v9c0 .5-.5 1-1 1h-4c-.5 0-1-.5-1-1V8z"/></svg>Bocchi the Rock
+                        </button>
+                        <button class="music-tab tab-modern" data-anime="dr_stone" onclick="loadAnimeMusic('dr_stone', this)">
+                            <svg class="tab-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 3l-5 9h4l-1 9 9-12h-5z" stroke-linecap="round" stroke-linejoin="round"/></svg>Dr. Stone
+                        </button>
+                        <button class="music-tab tab-modern" data-anime="kusuriya_no_hitorigoto" onclick="loadAnimeMusic('kusuriya_no_hitorigoto', this)">
+                            <svg class="tab-svg" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C9 2 7 4 7 7c0 2 1 4 5 5 4-1 5-3 5-5 0-3-2-5-5-5z"/><path d="M7 13c-3 1-5 3-5 5h20c0-2-2-4-5-5" fill="none" stroke="currentColor" stroke-width="2"/></svg>Apothecary Diaries
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Group: YOASOBI & Populer -->
+                <div class="music-group collapsed">
+                    <button class="music-group-header" onclick="toggleMusicGroup(this)">
+                        <span>🎤 YOASOBI &amp; Populer</span>
+                        <svg class="music-group-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+                    </button>
+                    <div class="music-group-body" id="tabsYoasobi">
+                        <button class="music-tab tab-yoasobi" data-anime="oshi_no_ko" onclick="loadAnimeMusic('oshi_no_ko', this)">
+                            <svg class="tab-svg" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2 5h5l-4 3 1.5 5L12 12l-4.5 3L9 10 5 7h5z"/><circle cx="12" cy="11" r="2" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>Oshi no Ko
+                        </button>
+                        <button class="music-tab tab-yoasobi" data-anime="death_note" onclick="loadAnimeMusic('death_note', this)">
+                            <svg class="tab-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="2" width="16" height="20" rx="2"/><path d="M8 7h8M8 11h8M8 15h5" stroke-linecap="round"/></svg>Death Note
+                        </button>
+                        <button class="music-tab tab-yoasobi" data-anime="fullmetal_alchemist_brotherhood" onclick="loadAnimeMusic('fullmetal_alchemist_brotherhood', this)">
+                            <svg class="tab-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 3v18M3 12h18"/><circle cx="12" cy="12" r="4"/></svg>FMA Brotherhood
+                        </button>
+                        <button class="music-tab tab-yoasobi" data-anime="sword_art_online" onclick="loadAnimeMusic('sword_art_online', this)">
+                            <svg class="tab-svg" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.5 8.5L22 12l-7.5 1.5L12 22l-2.5-8.5L2 12l7.5-1.5z"/></svg>SAO
+                        </button>
+                        <button class="music-tab tab-yoasobi" data-anime="tokyo_ghoul" onclick="loadAnimeMusic('tokyo_ghoul', this)">
+                            <svg class="tab-svg" viewBox="0 0 24 24" fill="currentColor"><path d="M12 4C7 4 3 8 3 12s4 9 9 9 9-5 9-9-4-8-9-8zm0 3c1.7 0 3 1.3 3 3s-1.3 3-3 3-3-1.3-3-3 1.3-3 3-3z"/></svg>Tokyo Ghoul
+                        </button>
+                        <button class="music-tab tab-yoasobi" data-anime="re_zero_kara_hajimeru_isekai_seikatsu" onclick="loadAnimeMusic('re_zero_kara_hajimeru_isekai_seikatsu', this)">
+                            <svg class="tab-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><polyline points="12,7 12,12 15,14" stroke-linecap="round"/><path d="M16 5l2-2M16 5h3M16 5v3" stroke-linecap="round"/></svg>Re:Zero
+                        </button>
+                        <button class="music-tab tab-yoasobi" data-anime="mob_psycho_100" onclick="loadAnimeMusic('mob_psycho_100', this)">
+                            <svg class="tab-svg" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="8" r="4"/><path d="M8 14s-6 1-6 5h20c0-4-6-5-6-5"/><path d="M12 14v4" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="19" r="2" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>Mob Psycho 100
+                        </button>
+                        <button class="music-tab tab-yoasobi" data-anime="kono_subarashii_sekai_ni_shukufuku_wo" onclick="loadAnimeMusic('kono_subarashii_sekai_ni_shukufuku_wo', this)">
+                            <svg class="tab-svg" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l1.5 4h4l-3.5 2.5 1.5 4-3.5-2.5-3.5 2.5 1.5-4L7 6h4z"/><path d="M12 14c-4 0-6 2-6 4h12c0-2-2-4-6-4z"/></svg>KonoSuba
+                        </button>
+                        <button class="music-tab tab-yoasobi" data-anime="overlord" onclick="loadAnimeMusic('overlord', this)">
+                            <svg class="tab-svg" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2L4 6v6c0 5 3.5 9.7 8 11 4.5-1.3 8-6 8-11V6L12 2z"/></svg>Overlord
+                        </button>
+                        <button class="music-tab tab-yoasobi" data-anime="tensei_shitara_slime_datta_ken" onclick="loadAnimeMusic('tensei_shitara_slime_datta_ken', this)">
+                            <svg class="tab-svg" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="13" r="8"/><path d="M9 11c1-2 5-2 6 0" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><circle cx="9.5" cy="9.5" r="1"/><circle cx="14.5" cy="9.5" r="1"/></svg>TenSura
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Group: Terbaru 2024-2026 -->
+                <div class="music-group collapsed">
+                    <button class="music-group-header music-group-header-new" onclick="toggleMusicGroup(this)">
+                        <span>🔥 Terbaru 2024–2026</span>
+                        <svg class="music-group-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+                    </button>
+                    <div class="music-group-body" id="tabsNew">
+                        <button class="music-tab tab-modern" data-anime="ore_dake_level_up_na_ken" onclick="loadAnimeMusic('ore_dake_level_up_na_ken', this)">
+                            <svg class="tab-svg" viewBox="0 0 24 24" fill="currentColor"><path d="M13 2L3 14h9l-1 8 10-12h-9z"/></svg>Solo Leveling
+                        </button>
+                        <button class="music-tab tab-modern" data-anime="dandadan" onclick="loadAnimeMusic('dandadan', this)">
+                            <svg class="tab-svg" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="10" r="6" fill="none" stroke="currentColor" stroke-width="2"/><path d="M8 16l-2 5h12l-2-5"/><circle cx="9" cy="9" r="1.5"/><circle cx="15" cy="9" r="1.5"/></svg>Dandadan
+                        </button>
+                        <button class="music-tab tab-modern" data-anime="kaijuu_8_gou" onclick="loadAnimeMusic('kaijuu_8_gou', this)">
+                            <svg class="tab-svg" viewBox="0 0 24 24" fill="currentColor"><path d="M3 20l5-12 4 6 3-4 6 10H3z"/></svg>Kaiju No. 8
+                        </button>
+                        <button class="music-tab tab-modern" data-anime="sousou_no_frieren" onclick="loadAnimeMusic('sousou_no_frieren', this)">
+                            <svg class="tab-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2c-2 3-4 6-4 9a4 4 0 0 0 8 0c0-3-2-6-4-9z" fill="currentColor"/><path d="M8 18c-2 1-4 3-4 4h16c0-1-2-3-4-4" stroke-linecap="round"/></svg>Frieren
+                        </button>
+                        <button class="music-tab tab-modern" data-anime="mushoku_tensei_isekai_ittara_honki_dasu" onclick="loadAnimeMusic('mushoku_tensei_isekai_ittara_honki_dasu', this)">
+                            <svg class="tab-svg" viewBox="0 0 24 24" fill="currentColor"><rect x="4" y="2" width="16" height="20" rx="2" fill="none" stroke="currentColor" stroke-width="2"/><path d="M8 7h8M8 11h8M8 15h4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>Mushoku Tensei
+                        </button>
+                        <button class="music-tab tab-modern" data-anime="mashle" onclick="loadAnimeMusic('mashle', this)">
+                            <svg class="tab-svg" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="8" r="5"/><path d="M7 14h10l1 7H6z"/></svg>Mashle
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Group: Mix -->
+                <div class="music-tab-group-label music-tab-group-mix">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:13px;height:13px;vertical-align:middle;margin-right:4px;"><path d="M16 3h5v5M4 20L21 3M21 16v5h-5M15 15l6 6M4 4l5 5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    Campuran Acak
+                </div>
+                <div class="music-anime-tabs">
+                    <button class="music-tab music-tab-mix" data-anime="__mix__" onclick="loadAnimeMix(this)">
+                        <svg class="tab-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 3h5v5M4 20L21 3M21 16v5h-5M15 15l6 6M4 4l5 5" stroke-linecap="round" stroke-linejoin="round"/></svg>Mix Semua Anime
+                    </button>
+                </div>
+
+                <audio id="musicAudio"></audio>
+
+                <div class="mpc-now-playing" id="mpcNowPlaying">
+                    <div class="mpc-cover" id="mpcCover">
+                        <svg viewBox="0 0 24 24" fill="currentColor" width="28" height="28"><path d="M12 3v10.55A4 4 0 1 0 14 17V7h4V3h-6z"/></svg>
+                    </div>
+                    <div class="mpc-info">
+                        <div class="mpc-title" id="mpcTitle">Pilih lagu di bawah</div>
+                        <div class="mpc-artist" id="mpcArtist">—</div>
+                        <div class="mpc-episodes" id="mpcEpisodes"></div>
+                    </div>
+                </div>
+
+                <div class="mpc-progress-wrap">
+                    <span class="mpc-time" id="mpcCurrent">0:00</span>
+                    <input type="range" class="mpc-progress" id="mpcProgress" min="0" max="100" value="0" step="0.1">
+                    <span class="mpc-time" id="mpcDuration">0:00</span>
+                </div>
+
+                <div class="mpc-controls">
+                    <button class="mpc-btn" id="mpcPrev" title="Sebelumnya">
+                        <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20"><path d="M6 6h2v12H6zm3.5 6l8.5 6V6z"/></svg>
+                    </button>
+                    <button class="mpc-btn mpc-play-btn" id="mpcPlay" title="Play/Pause">
+                        <svg id="mpcPlayIcon" viewBox="0 0 24 24" fill="currentColor" width="22" height="22"><path d="M8 5v14l11-7z"/></svg>
+                    </button>
+                    <button class="mpc-btn" id="mpcNext" title="Berikutnya">
+                        <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20"><path d="M6 18l8.5-6L6 6v12zm2-8.14L11.03 12 8 14.14V9.86zM16 6h2v12h-2z"/></svg>
+                    </button>
+                    <div class="mpc-volume-wrap">
+                        <span class="mpc-vol-icon" id="mpcVolIcon">
+                            <svg id="mpcVolSvg" viewBox="0 0 24 24" fill="currentColor" width="20" height="20"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg>
+                        </span>
+                        <input type="range" class="mpc-volume" id="mpcVolume" min="0" max="1" step="0.01" value="0.8">
+                    </div>
+                </div>
+
+                <div class="mpc-songlist-header">
+                    <span class="mpc-songlist-title">
+                        <svg viewBox="0 0 24 24" fill="currentColor" width="15" height="15" style="vertical-align:middle;margin-right:5px;"><path d="M4 6h16v2H4zm0 5h16v2H4zm0 5h16v2H4z"/></svg>
+                        Daftar Lagu
+                    </span>
+                    <button class="mpc-songlist-toggle" id="mpcSongListToggle" onclick="toggleSongList()">
+                        <svg id="mpcToggleIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="14" height="14"><polyline points="6 9 12 15 18 9"/></svg>
+                        <span id="mpcToggleText">Tampilkan</span>
+                    </button>
+                </div>
+                <div class="mpc-song-list-wrap" id="mpcSongListWrap" style="display:none;">
+                    <div class="mpc-song-list" id="mpcSongList">
+                        <div class="mpc-loading">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16" style="vertical-align:middle;margin-right:6px;"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2" stroke-linecap="round"/></svg>Memuat daftar lagu...
+                        </div>
+                    </div>
+                </div>
+
+                <button class="back-to-page-btn" onclick="document.getElementById('musicModal').classList.remove('show'); document.body.style.overflow='';">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="15" height="15" style="vertical-align:middle;margin-right:5px;"><polyline points="15 18 9 12 15 6"/></svg>Kembali ke Halaman
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="coding-words.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
