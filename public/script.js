@@ -1198,11 +1198,43 @@ function mpcSetVolIcon(vol) {
     mpcVolIcon.innerHTML = vol === 0 ? SVG_VOL_MUTE : vol < 0.4 ? SVG_VOL_LOW : SVG_VOL_HIGH;
 }
 
+// OGG Vorbis tidak bisa di-decode Chrome/Brave di Android -> pakai URL video WebM
+// (ada track audio, didukung semua browser). canPlayType('audio/ogg') = '' di Android.
+function mpcPickSrc(song) {
+    if (song.audioUrl && musicAudio.canPlayType('audio/ogg')) return song.audioUrl;
+    return song.videoUrl || song.audioUrl;
+}
+
+let mpcTriedVideo = false;
+
+function mpcPlayCurrent() {
+    musicAudio.play().then(() => {
+        mpcSetPlayIcon(true);
+        mpcCover.classList.add('playing');
+    }).catch(() => {
+        // play() ditolak (format tak didukung) -> coba fallback video WebM sekali saja
+        const song = mpcSongs[mpcCurrentIndex];
+        if (song && song.videoUrl && !mpcTriedVideo && musicAudio.src !== song.videoUrl) {
+            mpcTriedVideo = true;
+            musicAudio.src = song.videoUrl;
+            musicAudio.play().then(() => {
+                mpcSetPlayIcon(true);
+                mpcCover.classList.add('playing');
+            }).catch(() => {
+                mpcTitle.textContent = 'Gagal memutar audio';
+                mpcSetPlayIcon(false);
+                mpcCover.classList.remove('playing');
+            });
+        }
+    });
+}
+
 function mpcSetSong(index) {
     if (index < 0 || index >= mpcSongs.length) return;
     mpcCurrentIndex = index;
     const song = mpcSongs[index];
-    musicAudio.src = song.audioUrl;
+    mpcTriedVideo = false;
+    musicAudio.src = mpcPickSrc(song);
     mpcTitle.textContent = song.title;
     mpcArtist.textContent = song.artist || '—';    mpcEpisodes.textContent = song.episodes ? `Ep. ${song.episodes}` : '';
     mpcCover.innerHTML = song.type === 'OP' ? SVG_COVER_OP : song.type === 'ED' ? SVG_COVER_ED : SVG_COVER_DEF;
@@ -1212,10 +1244,7 @@ function mpcSetSong(index) {
     document.querySelectorAll('.mpc-song-item').forEach((el, i) => {
         el.classList.toggle('active', i === index);
     });
-    musicAudio.play().then(() => {
-        mpcSetPlayIcon(true);
-        mpcCover.classList.add('playing');
-    }).catch(() => {});
+    mpcPlayCurrent();
 }
 
 function mpcRenderList() {
@@ -1360,6 +1389,14 @@ musicAudio.addEventListener('ended', () => {
 });
 
 musicAudio.addEventListener('error', () => {
+    // decode/load gagal (mis. OGG di Android) -> fallback ke video WebM sekali saja
+    const song = mpcSongs[mpcCurrentIndex];
+    if (song && song.videoUrl && !mpcTriedVideo && musicAudio.src !== song.videoUrl) {
+        mpcTriedVideo = true;
+        musicAudio.src = song.videoUrl;
+        mpcPlayCurrent();
+        return;
+    }
     mpcTitle.textContent = 'Gagal load audio';
     mpcSetPlayIcon(false);
     mpcCover.classList.remove('playing');

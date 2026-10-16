@@ -75,6 +75,9 @@ async function fetchAnimeSongs(slug) {
         ? theme.song.artists.map(a => a.name).join(', ') : '—',
       episodes: entry.episodes || '',
       audioUrl: video.audio.link,
+      // Fallback: Chrome/Brave Android tidak bisa decode OGG Vorbis,
+      // pakai URL video WebM (ada track audio, didukung semua browser)
+      videoUrl: video.link || '',
       animeName: info.name || anime.name,
       animeEmoji: info.emoji || '🎵'
     });
