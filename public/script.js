@@ -942,10 +942,12 @@ function rotatePhrase() {
 
 function lockScroll() {
     document.body.style.overflow = 'hidden';
+    document.body.classList.add('modal-open');
 }
 
 function unlockScroll() {
     document.body.style.overflow = '';
+    document.body.classList.remove('modal-open');
 }
 
 function formatUpdateTimestamp() {
