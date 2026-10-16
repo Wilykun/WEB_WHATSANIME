@@ -1043,6 +1043,7 @@ devModalClose.addEventListener('click', () => {
 serverModalClose.addEventListener('click', () => {
     serverModal.classList.remove('show');
     unlockScroll();
+    stopServerTimers();
 });
 
 devModal.addEventListener('click', (e) => {
@@ -1056,13 +1057,73 @@ serverModal.addEventListener('click', (e) => {
     if (e.target === serverModal) {
         serverModal.classList.remove('show');
         unlockScroll();
+        stopServerTimers();
     }
 });
 
+// Timer jam server & masa berjalan (dihentikan saat modal ditutup)
+let serverClockTimer = null;
+let uptimeTickTimer = null;
+function stopServerTimers() {
+    if (serverClockTimer) { clearInterval(serverClockTimer); serverClockTimer = null; }
+    if (uptimeTickTimer) { clearInterval(uptimeTickTimer); uptimeTickTimer = null; }
+}
+
+const fmtClockWIB = new Intl.DateTimeFormat('id-ID', {
+    timeZone: 'Asia/Jakarta', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false
+});
+
+function fmtElapsed(ms) {
+    const s = Math.max(0, Math.floor(ms / 1000));
+    const d = Math.floor(s / 86400);
+    const h = Math.floor(s % 86400 / 3600);
+    const m = Math.floor(s % 3600 / 60);
+    const sec = s % 60;
+    const p = n => String(n).padStart(2, '0');
+    return d > 0 ? `${d}h ${p(h)}j ${p(m)}m ${p(sec)}d` : `${p(h)}j ${p(m)}m ${p(sec)}d`;
+}
+
 async function updateServerInfo() {
+    stopServerTimers();
     try {
         const res = await fetch('/api/server-info');
         const info = await res.json();
+
+        // Mode serverless (Vercel): jam server + masa berjalan dihitung realtime,
+        // metrik mesin memang tidak tersedia di lingkungan serverless.
+        if (info.serverless) {
+            const set = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v; };
+
+            // Jam server: sinkron sekali ke waktu function, lalu ticking lokal tiap detik
+            const offset = new Date(info.time).getTime() - Date.now();
+            const timeEl = document.getElementById('serverTime');
+            const tickClock = () => {
+                if (timeEl) timeEl.textContent = fmtClockWIB.format(new Date(Date.now() + offset)) + ' WIB';
+            };
+            tickClock();
+            serverClockTimer = setInterval(tickClock, 1000);
+            set('serverDate', `${info.dateWIB} · ${info.region}`);
+
+            // Masa berjalan: dari tanggal live perdana (tetap) — tanpa reset, tanpa database
+            const launchMs = new Date(info.launchedAt).getTime();
+            const upEl = document.getElementById('uptime');
+            const tickUp = () => { if (upEl) upEl.textContent = fmtElapsed(Date.now() - launchMs); };
+            tickUp();
+            uptimeTickTimer = setInterval(tickUp, 1000);
+
+            ['ramUsage','cpuUsage','heapUsage','cpuCores','totalRequests'].forEach(id => set(id, 'Tidak tersedia'));
+            set('cpuModel', 'Serverless (Vercel)');
+            set('svrPlatform', info.platform);
+            set('svrArch', info.arch);
+            set('svrNode', info.nodeVersion);
+            set('svrPid', '-');
+            set('cpuArch', 'Arch: ' + info.arch);
+            ['ramBar','cpuBar','heapBar'].forEach(id => { const el = document.getElementById(id); if (el) el.style.width = '0%'; });
+            set('ramTotal', '-'); set('cpuLoad5', '-'); set('heapRss', '-');
+            return;
+        }
+
+        // Jalur lama: server Node/Express biasa (punya metrik mesin)
         const { ram, cpu, heap, uptime, totalRequests, nodeVersion, platform, arch, pid } = info;
 
         document.getElementById('ramUsage').textContent = `${ram.percent}% (${ram.usedMB} MB / ${ram.totalMB} MB)`;
